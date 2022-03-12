@@ -55,17 +55,17 @@ header .search-navbar {
     outline-offset: 0; 
 } 
 
-.search img {
-    width: 30px;
-    height: 33.5px;
-}
-
 .search-tab .search {
+    padding: 6.7px;
+    padding-bottom: 2px;
     float: right;
-    margin-right: 15px;
-    padding: 4.3px;
     border-radius: 0 5px 5px 0;
     border: none;
+    margin-right: 10.2px;
+}
+
+.search img {
+    width: 100%;
 }
 
 .search-tab .search:hover{
@@ -132,12 +132,6 @@ header .credentials {
     padding-top: 8px;
 }
 
-.login-button img {
-    width: 30px;
-    height: 35px;
-    position: relative;
-    top: 5px;
-}
 
 .login-button:hover,
 .login span:focus {

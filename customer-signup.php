@@ -21,7 +21,7 @@
                     <form action="search.php" class="search-tab" method="GET">
                         <input type="text" autocomplete="on" placeholder="Type your search here" id="search" class="search-bar" name="find">
                         <button class="search" name="search" type="submit">
-                            <img name="search" src="./assets/icons/ionicons-2.0.1/png/512/ios7-search.png" alt="search button" class="btn-search">
+                            <img src="./assets/ionicons-2.0.1/png/512/ios7-search.png">
                         </button>
                         <ul class="search-list" id="search-list" style="display: none;">
                         </ul>

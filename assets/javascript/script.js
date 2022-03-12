@@ -116,3 +116,25 @@ function clearSearchInput() {
     document.getElementById('search-list').style.display = "none";
     document.getElementById('search').value = '';
 }
+
+//check if the account is logged in before trying to report a buyer or seller
+const report = document.getElementsByClassName('report');
+const error = document.getElementById('show_error');
+
+report.onclick = () => {
+    let xhr = XMLHttpRequest();
+    xhr.onload = () => {
+        if(xhr.readyState === XMLHttpRequest.DONE) {
+            if(xhr.status === 200) {
+                let data = response;
+                if(data !== 'success') {
+                    error.textContent = data;
+                    error.style.display = "block";
+                }
+            }
+        }
+    }
+    xhr.open("POST", "./farmer_signup_code.php", true);
+       let formData = new FormData(form);
+       xhr.send(formData);
+}

@@ -1,16 +1,7 @@
 <?php
-
     //do the session check
     session_start();
-
-    //set all PHP error reporting in order to see every error in our script
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
-
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
    
-
     //connecting to the database
     $database = new mysqli("localhost", "root", "", "ieka");
     //check connection
@@ -20,112 +11,8 @@
     } else {
       // echo "connection successful";
     }
+
     
-   
-
-    if(isset($_POST['search'])) {
-        //validate the search form values
-        $search = $_POST['find'];
-        //set it to empty values
-        $search = "";
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $name = strip($_POST['search']);
-        }
-    }
-    
-
-    //strip unnecessary characters and backlashes in the search form
-    function strip($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
-    
-   //LOGIN
-    if(isset($_POST['enter'])) {
-        //get the parameters in the form
-        $cell = $_POST['phone-number'];
-        $code = $_POST['passcode'];
-        //make sure the forms are filled
-        if(!empty(!$cell) && !empty($code)) {
-            //check the details in the farmers' table
-            $sql = "SELECT * FROM farmers WHERE phone = '{$cell}'";
-            $result = $database->query($sql)->fetch_assoc();
-
-            //check the details in admins table
-            $sql = "SELECT * FROM admin WHERE phone = '{$cell}'";
-            $record = $database->query($sql)->fetch_assoc();
-
-            //check the details in the customers' table
-            $sql = "SELECT * FROM customers WHERE phone = '{$cell}'";
-            $details = $database->query($sql)->fetch_assoc();
-
-            //login for the farmers
-            if($cell === $result['phone'] && $code === $result['password']) {
-                $sql = "SELECT * FROM farmers WHERE phone = '{$cell}'"; var_dump($sql);exit();
-                $farm_sql = $database->query($sql);
-                if($farm_sql->num_rows > 0) {
-                    $farmer = $farm_sql->fetch_assoc();
-                    $_SESSION['id'] = $farmer['id']; ?>
-                    <script>
-                        const error = document.getElementById('error');
-                        let word = "Login Successful!";
-                        error.textContent = word;
-                        error.style.display = "block";
-                        window.location = "./farmers/index.php";
-                    </script> <?php
-                }
-                //login for the admins
-            } elseif($cell === $record['phone'] && $code === $result['passcode']) {
-                $sql = "SELECT * FROM admin WHERE phone = '{$cell}'";
-                $admin_sql = $database->query($sql);
-                if($admin_sql->num_rows > 0) {
-                    $admin = $farm_sql->fetch_assoc();
-                    $_SESSION['id'] = $admin['id']; ?>
-                    <script>
-                       const error = document.getElementById('error');
-                        let word = "Login Successful!";
-                        error.textContent = word;
-                        error.style.display = "block";
-                        location.href = "./admins/authentication/dashboard.php";
-                    </script> <?php
-                }
-                //login for the customers
-            } elseif($cell === $details['phone'] && $code === $details['passcode']) {
-                $sql = "SELECT * FROM customers WHERE phone = '{$cell}'";
-                $customer_sql = $database->query($sql);
-                if($customer_sql->num_rows > 0) {
-                    $customer = $farm_sql->fetch_assoc();
-                    $_SESSION['id'] = $customer['id']; ?>
-                    <script>
-                        const error = document.getElementById('error');
-                        let word = "Login Successful!";
-                        error.textContent = word;
-                        error.style.display = "block";
-                        location.href = "./customers/index.php";
-                    </script> <?php
-                }
-            } else { ?>
-                <script>
-                    const error = document.getElementById('error');
-                    let word = "Incorrect details! Check your phone number or your passcode!";
-                    error.textContent = word;
-                    error.style.display = "block";
-                </script> <?php
-                    return;
-            }
-        } else { ?>
-            <script>
-                    const error = document.getElementById('error');
-                    let word = "All inputs must be filled!";
-                    error.textContent = word;
-                    error.style.display = "block";
-                </script> <?php
-        }
-    }
-    
-
 ?>
 
 <!DOCTYPE html>
@@ -153,7 +40,7 @@
                         <ul class="search-list" id="search-list" style="display: none;">
                         </ul>
                         <button class="search" name="search" type="submit">
-                            <img name="search" src="./assets/icons/ionicons-2.0.1/png/512/ios7-search.png" alt="search button" class="btn-search">
+                            <img src="./assets/ionicons-2.0.1/png/512/ios7-search.png">
                         </button>
                     </form>
                 </div>
@@ -454,8 +341,8 @@
                         <li><a href="careers.php">careers</a></li>
                         <li><a href="about.php">about ieka</a></li>
                         <li><a href="relations.php">investor relations</a></li>
-                        <li><a href="login.php">login</a></li>
-                        <li><a href="register.php">register</a></li>
+                        <li><a href="customer-signup.php">customer signup</a></li>
+                        <li><a href="farmer-signup.php">farmer signup</a></li>
                         <li class="flag"><img src="./assets/images/download.png" alt="nigeria flag"> Nigeria</li>
                     </ul>
                 </div>
@@ -464,8 +351,8 @@
                 <div class="make money with us">
                     <h6>Make money with Ieka</h6>
                     <ul class="make-money">
-                        <li><a href="crop-sell.php">Sell your farm products</a></li>
-                        <li><a href="animal-sell.php">Sell your animals</a></li>
+                        <li><a href="sell.php">Sell your farm products</a></li>
+                        <li><a href="sell.php">Sell your animals</a></li>
                         <li><a href="advertise-info.php">Advertise with Ieka</a></li>
                         <li><a href="affliate-info.php">Become an affliate</a></li>
                         <li><a href="make-money.php">More...</a></li>
@@ -487,8 +374,9 @@
                 <div class="helpdesk">
                     <h6>our helpdesk</h6>
                     <ul class="help">
-                        <li><a href="report-buyer.php">Report a Buyer</a></li>
-                        <li><a href="report-seller.php">Report a Seller</a></li>
+                        <li class="report" name="report_buyer"><a href="#">Report a Buyer</a></li>
+                        <li id="show_error" style="display:none;">You have to log into your account to complete this operation</li>
+                        <li class="report" name="report-seller"><a href="#">Report a Seller</a></li>
                         <li><a href="account-issue.php">Account Issues</a></li>
                         <li><a href="account-creation-problem.php">Problems with account creation</a></li>
                     </ul>
@@ -499,16 +387,16 @@
                 <!--social media section-->
                 <div class="social-media">
                     <div class="twitter media">
-                        <a href="#"><img src="./assets/icons/ionicons-2.0.1/png/512/social-twitter-outline.png" alt="twitter"></a>
+                        <a href="#"><img src="./assets/ionicons-2.0.1/png/512/social-twitter-outline.png" alt="twitter"></a>
                     </div>
                     <div class="instagram media">
-                        <a href="#"><img src="./assets/icons/ionicons-2.0.1/png/512/social-instagram-outline.png" alt="instagram"></a>
+                        <a href="#"><img src="./assets/ionicons-2.0.1/png/512/social-instagram-outline.png" alt="instagram"></a>
                     </div>
                     <div class="linkedIn media">
-                        <a href="#"><img src="./assets/icons/ionicons-2.0.1/png/512/social-linkedin-outline.png" alt="linkedIn"></a>
+                        <a href="#"><img src="./assets/ionicons-2.0.1/png/512/social-linkedin-outline.png" alt="linkedIn"></a>
                     </div>
                     <div class="facebook media">
-                        <a href="#"><img src="./assets/icons/ionicons-2.0.1/png/512/social-facebook-outline.png" alt="facebook"></a>
+                        <a href="#"><img src="./assets/ionicons-2.0.1/png/512/social-facebook-outline.png" alt="facebook"></a>
                     </div>
                 </div>
 
